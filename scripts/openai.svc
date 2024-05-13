@@ -1,0 +1,11 @@
+[Unit]
+Description=systemd service start vllm-inference-openai.service
+[Service]
+Type=simple
+Restart=always
+RestartSec=2
+WorkingDirectory=/home/opc/vllm-master
+ExecStart=bash bash_openai.sh
+User=opc
+[Install]
+WantedBy=multi-user.target

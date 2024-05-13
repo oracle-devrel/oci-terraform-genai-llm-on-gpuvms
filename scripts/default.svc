@@ -1,0 +1,11 @@
+[Unit]
+Description=systemd service start vllm-inference-default.service
+[service]
+Type=simple
+Restart=always
+RestartSec=2
+WorkingDirectory=/home/opc/vllm-master
+ExecStart=bash bash.sh
+User=opc
+[Install]
+Wantedby=multi-user.target
