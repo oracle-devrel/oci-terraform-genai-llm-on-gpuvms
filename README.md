@@ -1,5 +1,9 @@
 ### Terraform stack to host LLMs on OCI GPU based bare metal machines.
 
+An OCI Terraform based approach to host Large Langauage Model for Inference using OCI Bare metal compute machines.
+
+![](images/a10_Custom_Inference.jpg)
+
 <details>
 <summary>Permissions needed to execute</summary>
 
@@ -22,7 +26,16 @@ access to retrive ad information
   <summary>How to use the stack</summary>
 
 ### Using OCI terraform provider and Terraform CLI
+- Clone the repo.
+```bash
+git clone https://github.com/oracle-devrel/oci-terraform-genai-llm-on-gpuvms
+```
+
 - create a `terraform.tfvars` file.
+```bash
+cd oci-terraform-genai-llm-on-gpuvms
+vi terraform.tfvars
+```
 ```terraform
 # Authentication
 tenancy_ocid         = "OCID of OCI Tenancy"
@@ -37,8 +50,16 @@ compartment_ocid = "OCID of OCI Compartment"
 model_path = "PATH of your LLM - example meta-llama/Meta-Llama-3-8B"
 huggingface_access_token = "READ access token from Hugging face"
 ssh_public_key="SSH Public key to access the BM"
-
 ``` 
+- Execute terraform cli.
+```shell
+terraform plan
+terraform apply
+```
+- To delete the stack/Its an irreversible action.
+```shell
+terraform destroy
+```
 
 ### Using OCI RMS Stack - Test in progress /Doc to update
 </details>
