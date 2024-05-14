@@ -1,5 +1,9 @@
 ### Terraform stack to host LLMs on OCI GPU based bare metal machines.
 
+An OCI Terraform based approach to host Large Langauage Model for Inference using OCI Bare metal compute machines.
+
+![](images/a10_Custom_Inference.jpg)
+
 <details>
 <summary>Permissions needed to execute</summary>
 
