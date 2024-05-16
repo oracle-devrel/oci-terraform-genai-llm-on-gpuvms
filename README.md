@@ -127,6 +127,17 @@ print("Chat response:", chat_response)
 ```
 </details>
 <details>
+<summary>Basic Troubleshooting</summary>
+
+- LLM inference is not ready or getting 504 error code when trying the URL.
+  - Login to the VM using SSH private-key
+  - Check the startup logs - Default path `/home/opc/llm-init/init.log`.
+  - For any failure of steps ,refer [setup.sh](scripts/setup.sh) to know about the exact steps to run manually
+  - Validate the service status - `sudo systemctl status vllm-inference-openai.service`
+- Details about LLM usage or response. We are capturing inference logs under path `/home/opc/vllm-master` with in file `vllm_log_file.log`.
+  
+</details>
+<details>
 <summary>Reference and read more </summary>
 
 - https://docs.oracle.com/en-us/iaas/content-management/doc/service-limits-quotas-policies-and-events.html
