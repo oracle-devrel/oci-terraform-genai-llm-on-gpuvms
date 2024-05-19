@@ -41,9 +41,11 @@ In order to run the setup, you will require to have the following requirements:
 - [OCI Service Limits and Quotas](https://docs.oracle.com/en-us/iaas/content-management/doc/service-limits-quotas-policies-and-events.html)
 - [vLLM Getting Started](https://docs.vllm.ai/en/latest/getting_started/quickstart.html)
 
-## How to use the stack
+## 1. Deploy Infrastructure
 
-### Using OCI terraform provider and Terraform CLI
+We'll use the Terraform stack to deploy the required infrastructure.
+
+### (Recommended) Option 1. Using OCI Terraform provider and Terraform CLI
 
 1. Clone the repository:
 
@@ -51,7 +53,15 @@ In order to run the setup, you will require to have the following requirements:
     git clone https://github.com/oracle-devrel/oci-terraform-genai-llm-on-gpuvms
     ```
 
-2. Create a `terraform.tfvars` file with the following content:
+2. Obtain the OCIDs we will need for the next step:
+
+    ```bash
+    echo $OCI_TENANCY
+    echo $OCI_REGION
+    echo $OCI_COMPARTMENT
+    ```
+
+3. Create a `terraform.tfvars` file with the following 6 variables (compartment, tenancy, region, user OCIDs, and key location and fingerprint):
 
     ```bash
     cd oci-terraform-genai-llm-on-gpuvms
@@ -74,7 +84,17 @@ In order to run the setup, you will require to have the following requirements:
     ssh_public_key="SSH Public key to access the BM"
     ```
 
-3. Execute the Terraform plan & apply:
+    > The private key and fingerprint need to be added to your OCI user within your tenancy, in `Identity >> Domains >> OracleIdentityCloudService >> Users`:
+
+    ![api keys](./img/api_keys.PNG)
+
+    If you don't have one already, you can create a public-private keypair by running the following command in bash:
+
+    ```bash
+    ssh-keygen
+    ```
+
+4. Execute the Terraform plan & apply:
 
     ```bash
     terraform init
@@ -82,7 +102,7 @@ In order to run the setup, you will require to have the following requirements:
     terraform apply
     ```
 
-4. To delete the stack, run the following command:
+5. (Optional) After you're done with development and want to delete the stack, run the following command:
 
     ```bash
     terraform destroy
@@ -90,7 +110,7 @@ In order to run the setup, you will require to have the following requirements:
 
     > **Note**: this action is irreversible!
 
-### Using OCI RMS Stack - Test in progress /Doc to update
+### Option 2. Using OCI RMS Stack - Test in progress /Doc to update
 
 ## 3. Execution flow /Resources covered
 
@@ -101,19 +121,29 @@ In order to run the setup, you will require to have the following requirements:
 
 2. Run [this following startup](scripts/setup.sh) script:
 
+    You will need to have an environment variable called:
+
     ```bash
-    cd scripts/ # go to the dir
-    chmod a+x setup.sh
-    ./setup.sh
+    export huggingface_access_token = "YOUR_TOKEN"
     ```
 
-    This script will install all necessary software libraries, modules, and the Large Language Model.
+    Then, run the setup script:
+
+    ```bash
+    cd scripts/ # go to the dir
+    chmod a+x setup.sh # allow the script to be executed
+    ./setup.sh # run the script
+    ```
+
+    With your own HF access token, to be able to pull the Large Language Model.
+
+    This script will install all necessary software libraries, modules, and the LLM.
 
     It will load and start and provide an inference endpoint, so we can later call the model through an API if we want to.
 
 ## 3. How to use the LLM
 
-- By default the startup script expose LLM inference with openapi compatible route.
+- By default the startup script expose LLM inference with an OpenAI-compatible route.
 
 - Some of the possible routes with open-api compatible using vLLM are:
 
@@ -121,16 +151,16 @@ In order to run the setup, you will require to have the following requirements:
     - `/v1/completion`
     - `/v1/chat/completion`
 
-- After Terraform has completed Refer the execution outcome to fetch the URL and OpenAI key:
+- After Terraform has completed, refer the execution outcome to fetch the URL and OpenAI key:
 
     ```terraform
-    #terraform output LLM_URL
+    terraform output LLM_URL
     "https://XXXX.<OCIREGION>/path/name"
-    #terraform output API_KEY
+    terraform output API_KEY
     "AlphaNumeric..."
     ```
 
-- Sample exeuction using `curl`:
+- Sample execution using `curl`:
 
 ```bash
 export URL="<LLM_URL value>"
@@ -167,17 +197,25 @@ print("Chat response:", chat_response)
 
 ## Basic Troubleshooting
 
-- LLM inference is not ready or getting 504 error code when trying the URL.
-  - Login to the VM using SSH private-key
-  - Check the startup logs - Default path `/home/opc/llm-init/init.log`.
-  - For any failure of steps, refer to [setup.sh](scripts/setup.sh) to know about which exact steps to run manually
-  - Validate the service status - `sudo systemctl status vllm-inference-openai.service`
-- Details about LLM usage or response. We are capturing inference logs under path `/home/opc/vllm-master` with in file `vllm_log_file.log`.
+1. LLM inference is not ready or getting 504 error code when trying the URL:
+
+    - Login to the VM where you've deployed the solution using the SSH private-key you created in chapter 1.
+    - Check the startup logs - Default path `/home/opc/llm-init/init.log`.
+    - For any failures, refer to [setup.sh](scripts/setup.sh) to know about which exact steps to run manually
+    - Check the vLLM service is up and running:
+
+        ```bash
+        sudo systemctl status vllm-inference-openai.service
+        ```
+
+2. Details about LLM usage or response. We are capturing inference logs under path `/home/opc/vllm-master` with in file `vllm_log_file.log`.
   
 ### Contributors
 
 Author: [Rahul M R.](https://github.com/RahulMR42)
+
 Editor: [Nacho Martinez](https://github.com/jasperan)
+
 Last release: May 2024
 
 This project is open source. Please submit your contributions by forking this repository and submitting a pull request!  Oracle appreciates any contributions that are made by the open source community.
