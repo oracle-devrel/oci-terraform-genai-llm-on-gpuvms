@@ -61,7 +61,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     echo $OCI_COMPARTMENT
     ```
 
-3. Create a `terraform.tfvars` file with the following 6 variables (compartment, tenancy, region, user OCIDs, and key location and fingerprint):
+3. Create/edit a `terraform.tfvars` file with the following 6 variables (compartment, tenancy, region, user OCIDs, and key location and fingerprint):
 
     ```bash
     cd oci-terraform-genai-llm-on-gpuvms
