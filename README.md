@@ -17,11 +17,13 @@ These LLMs can come from any HuggingFace well-formed repository (your choice), s
 
 ### Prerequisites
 
-In order to run the setup, you will require to complete the following steps:
+In order to run the setup, you will require to have the following requirements:
 
-1. The user's tenancy and region must have the necessary limits for GPU machines. By default, it uses `BM.GPU.A10.4`, a cluster of 4 tensor cores.
+1. An Oracle Cloud Infrastructure (OCI) Account
 
-2. If the user is not a tenancy administrator, the user must have OCI access to the following resource groups:
+2. The user's tenancy and region must have the necessary limits for GPU machines. By default, it uses `BM.GPU.A10.4`, a cluster of 4 tensor cores.
+
+3. If the user is not a tenancy administrator, the user must have OCI access to the following resource groups:
 
     ```text
     logging-family
@@ -31,7 +33,7 @@ In order to run the setup, you will require to complete the following steps:
     API-gateway-family
     ```
 
-3. A valid API token from HuggingFace (`READ` permission is enough; no need for read + write)
+4. A valid API token from HuggingFace (`READ` permission is enough; no need for read + write)
 4 In case if you are using an access-protected repository (like LLaMA-2 or LLaMA-3), make sure to accept the terms and conditions and get access to the gated repository in advance, through the HuggingFace portal
 
 ### Docs
@@ -163,9 +165,19 @@ chat_response = client.chat.completions.create(
 print("Chat response:", chat_response)
 ```
 
+## Basic Troubleshooting
+
+- LLM inference is not ready or getting 504 error code when trying the URL.
+  - Login to the VM using SSH private-key
+  - Check the startup logs - Default path `/home/opc/llm-init/init.log`.
+  - For any failure of steps, refer to [setup.sh](scripts/setup.sh) to know about which exact steps to run manually
+  - Validate the service status - `sudo systemctl status vllm-inference-openai.service`
+- Details about LLM usage or response. We are capturing inference logs under path `/home/opc/vllm-master` with in file `vllm_log_file.log`.
+  
 ### Contributors
 
 Author: [Rahul M R.](https://github.com/RahulMR42)
+Editor: [Nacho Martinez](https://github.com/jasperan)
 Last release: May 2024
 
 This project is open source. Please submit your contributions by forking this repository and submitting a pull request!  Oracle appreciates any contributions that are made by the open source community.

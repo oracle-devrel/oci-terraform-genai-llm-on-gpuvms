@@ -42,7 +42,8 @@ mkdir ${llm_master_dir} >> ${log_file} 2>&1
 cd ${llm_master_dir} >> ${log_file} 2>&1
 virtualenv env >> ${log_file} 2>&1
 source env/bin/activate >> ${log_file} 2>&1
-pip install vllm openai flash_attn>> ${log_file} 2>&1
+pip install vllm >> ${log_file} 2>&1
+pip install openai >> ${log_file} 2>&1
 echo "[`date`]--- Python Vllm libraries are installed ---" |tee -a ${log_file} 2>&1
 sudo firewall-cmd  --zone=public --permanent --add-port ${llm_port_default}/tcp >> ${log_file} 2>&1
 sudo firewall-cmd --zone=public --permanent --add-port ${llm_port_openai}/tcp >> ${log_file} 2>&1
@@ -52,11 +53,15 @@ sudo firewall-cmd --list-all >> ${log_file} 2>&1
 echo "[`date`]--- firewall setup completed ---" |tee -a ${log_file} 2>&1
 cd ${llm_master_dir} >> ${log_file} 2>&1
 echo "source env/bin/activate" >>bash.sh
-echo "python -m vllm.entrypoints.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_default}" >>bash.sh
+echo "pip install flash_attn">>bash.sh
+echo "export vllm_log_file=vllm_log_file.log" >>bash.sh
+echo "python -m vllm.entrypoints.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_default}>>${vllm_log_file} 2>&1" >>bash.sh
 echo "---Startup file for vllm default endpoint service  created ----" |tee -a ${log_file} 2>&1
 echo "source env/bin/activate">>bash_openai.sh
+echo "pip install flash_attn">>bash_openai.sh
+echo "export vllm_log_file=vllm_log_file.log" >>bash_openai.sh
 echo "export api_key=${api_key}">>bash_openai.sh
-echo "python -m vllm.entrypoints.openai.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_openai} --api-key "'${api_key}'"" >>bash_openai.sh
+echo "python -m vllm.entrypoints.openai.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_openai} --api-key "'${api_key}'">>${vllm_log_file} 2>&1" >>bash_openai.sh
 echo "[`date`]---Startup file for vllm openai endpoint service  created ----" |tee -a ${log_file} 2>&1
 sudo cp /home/opc/openai.svc /etc/systemd/system/vllm-inference-openai.service >> ${log_file} 2>&1
 sudo cp /home/opc/default.svc /etc/systemd/system/vllm-inference-default.service >> ${log_file} 2>&1
