@@ -53,15 +53,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     git clone https://github.com/oracle-devrel/oci-terraform-genai-llm-on-gpuvms
     ```
 
-2. Obtain the OCIDs we will need for the next step:
-
-    ```bash
-    echo $OCI_TENANCY
-    echo $OCI_REGION
-    echo $OCI_COMPARTMENT
-    ```
-
-3. Create/edit a `terraform.tfvars` file with the following 6 variables (compartment, tenancy, region, user OCIDs, and key location and fingerprint):
+2. Create/edit a `terraform.tfvars` file with the following 6 variables (compartment, tenancy, region, user OCIDs, and key location and fingerprint):
 
     ```bash
     cd oci-terraform-genai-llm-on-gpuvms
@@ -84,9 +76,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     ssh_public_key="SSH Public key to access the BM"
     ```
 
-    > The private key and fingerprint need to be added to your OCI user within your tenancy, in `Identity >> Domains >> OracleIdentityCloudService >> Users`:
-
-    ![api keys](./img/api_keys.PNG)
+    > The private key and fingerprint need to be added to your OCI user within your tenancy, in `Identity >> Domains >> OracleIdentityCloudService >> Users`.
 
     If you don't have one already, you can create a public-private keypair by running the following command in bash:
 
@@ -94,7 +84,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     ssh-keygen
     ```
 
-4. Execute the Terraform plan & apply:
+3. Execute the Terraform plan & apply:
 
     ```bash
     terraform init
@@ -102,7 +92,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     terraform apply
     ```
 
-5. (Optional) After you're done with development and want to delete the stack, run the following command:
+4. (Optional) After you're done with development and want to delete the stack, run the following command:
 
     ```bash
     terraform destroy
@@ -110,24 +100,14 @@ We'll use the Terraform stack to deploy the required infrastructure.
 
     > **Note**: this action is irreversible!
 
-### Option 2. Using OCI RMS Stack - Test in progress /Doc to update
+## 3. Execution Workflow
 
-## 3. Execution flow /Resources covered
-
-1. Let's create the required OCI resources with a Terraform stack:
+1. These are the created OCI resources with the Terraform stack:
 
     - OCI VM based on a GPU Image
-    - OCI API Gateway and Deployment for exposition
+    - OCI API Gateway and Deployment, which exposes the calls to the LLM through an API hosted on OCI
 
-2. Run [this following startup](scripts/setup.sh) script:
-
-    You will need to have an environment variable called:
-
-    ```bash
-    export huggingface_access_token = "YOUR_TOKEN"
-    ```
-
-    Then, run the setup script:
+2. `setup.sh` is executed inside [the Terraform script](scripts/setup.sh) (you don't need to run it).
 
     ```bash
     cd scripts/ # go to the dir
@@ -143,7 +123,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
 
 ## 3. How to use the LLM
 
-- By default the startup script expose LLM inference with an OpenAI-compatible route.
+- By default, the startup script exposes LLM inference with an OpenAI-compatible route.
 
 - Some of the possible routes with open-api compatible using vLLM are:
 
