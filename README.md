@@ -6,10 +6,7 @@
 
 Have you ever wondered how to deploy a Large Language Model (LLM) on OCI? In this solution, you will learn how to deploy a Large Language Models using NVIDIA OCI Bare Metal Compute Instances (NVIDIA A10 Tensor Core GPUs), with an inference server called `vLLM`.
 
-`vLLM` can be deployed as a server that implements the OpenAI API protocol. This allows vLLM to be used as a drop-in replacement for applications using OpenAI API, meaning that we can choose OpenAI models (like `gpt-3.5` or `gpt4`) to generate text for our request based just in two things:
-
-- The original user's query
-- The model name of the LLM you want to run text generation against.
+`vLLM` can be deployed as a server that implements the OpenAI API protocol. This allows vLLM to be used as a drop-in replacement for applications using OpenAI API, meaning that we can use common routes like `v1/completion`,`v1/chat/completion` across various LLLMs according to the application requirements.
 
 These LLMs can come from any HuggingFace well-formed repository (your choice), so we will need to authenticate to HuggingFace to pull the models (if you haven't built them from source) with an authentication token.
 
@@ -53,7 +50,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     git clone https://github.com/oracle-devrel/oci-terraform-genai-llm-on-gpuvms
     ```
 
-2. Create/edit a `terraform.tfvars` file with the following 6 variables (compartment, tenancy, region, user OCIDs, and key location and fingerprint):
+2. Create/edit a `terraform.tfvars` file with the following 9 variables (compartment, tenancy, region, user OCIDs, and key location fingerprint model_path huggingface_access_token and ssh_public_key):
 
     ```bash
     cd oci-terraform-genai-llm-on-gpuvms
@@ -81,7 +78,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     If you don't have one already, you can create a public-private keypair by running the following command in bash:
 
     ```bash
-    ssh-keygen
+    ssh-keygen 
     ```
 
 3. Execute the Terraform plan & apply:
@@ -109,17 +106,11 @@ We'll use the Terraform stack to deploy the required infrastructure.
 
 2. `setup.sh` is executed inside [the Terraform script](scripts/setup.sh) (you don't need to run it).
 
-    ```bash
-    cd scripts/ # go to the dir
-    chmod a+x setup.sh # allow the script to be executed
-    ./setup.sh # run the script
-    ```
+With your own HF access token, to be able to pull the Large Language Model.
 
-    With your own HF access token, to be able to pull the Large Language Model.
+This script will install all necessary software libraries, modules, and load the LLM.
 
-    This script will install all necessary software libraries, modules, and the LLM.
-
-    It will load and start and provide an inference endpoint, so we can later call the model through an API if we want to.
+It will start and provide an inference endpoint, so we can later call the model through an API if we want to.
 
 ## 3. How to use the LLM
 
@@ -151,7 +142,8 @@ curl -k $URL/v1/models  -H "Authorization: Bearer $TOKEN"
 - Chat completion using python OpenAI library
 
 ```python
-#export url = ""
+#export URL = ""
+#export TOKEN=
 #pip install openai --user
 from openai import OpenAI
 import os
@@ -188,7 +180,14 @@ print("Chat response:", chat_response)
         sudo systemctl status vllm-inference-openai.service
         ```
 
-2. Details about LLM usage or response. We are capturing inference logs under path `/home/opc/vllm-master` with in file `vllm_log_file.log`.
+2. Details about LLM usage or response. We are capturing inference logs under path `/home/opc/vllm-master` with in file `vllm_log_file.log`. Incase wish to push the logs to a specific path,update file `bash.sh` and `bash_openai.sh` with in the same path and restart the service.
+
+   ```bash
+   #Update below line with in file bash.sh or bash_openai.sh
+   export vllm_log_file=<new absolute path to the logs>
+   sudo systemctl restart  vllm-inference-openai.service
+   ```
+
   
 ### Contributors
 
