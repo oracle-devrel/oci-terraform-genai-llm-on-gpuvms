@@ -11,6 +11,7 @@ python_version="python39"
 pip_version="pip3.9"
 llm_master_dir="/home/opc/vllm-master"
 parallel_gpu_count=4
+vllm_log_file="vllm_log_file.log"
 #Execution
 mkdir -p ${log_dir}
 touch ${log_file}
@@ -57,10 +58,10 @@ sudo firewall-cmd --list-all >> ${log_file} 2>&1
 echo "[`date`]--- firewall setup completed ---" |tee -a ${log_file} 2>&1
 cd ${llm_master_dir} >> ${log_file} 2>&1
 echo "source env/bin/activate" >>bash.sh
-echo "/home/opc/vllm-master/env/bin/pip install flash_attn">>bash.sh
-echo "export vllm_log_file=vllm_log_file.log" >>bash.sh
+#echo "/home/opc/vllm-master/env/bin/pip install flash_attn">>bash.sh
+#echo "export vllm_log_file=vllm_log_file.log" >>bash.sh
 #echo "python -m vllm.entrypoints.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_default}>>${vllm_log_file} 2>&1" >>bash.sh
-echo "/home/opc/vllm-master/env/bin/python -m vllm.entrypoints.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_default}>>${vllm_log_file} 2>&1" >>bash.sh
+echo "/home/opc/vllm-master/env/bin/python -m vllm.entrypoints.api_server --model ${model_path} --tensor-parallel-size ${parallel_gpu_count} --port ${llm_port_default} >> vllm_log_file.log" >>bash.sh
 
 echo "---Startup file for vllm default endpoint service  created ----" |tee -a ${log_file} 2>&1
 echo "source env/bin/activate">>bash_openai.sh
