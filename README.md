@@ -114,15 +114,15 @@ It will start and provide an inference endpoint, so we can later call the model 
 
 ## 3. How to use the LLM
 
-- By default, the startup script exposes LLM inference with an OpenAI-compatible route.
+- By default, the startup script exposes LLM inference with an OpenAI-compatible route. This framework basically allows us to Plug and play models easily, as well as bringing exposed API endpoints to a common framework, even with models that are very different from standard GPT models. It also enables new supported features like streaming / Chat completion/embeddings/detokenization...
 
-- Some of the possible routes with open-api compatible using vLLM are:
+- Some of the possible routes (OpenAI compatible) using the vLLM are:
 
     - `/v1/models`
     - `/v1/completion`
     - `/v1/chat/completion`
 
-- After Terraform has completed, refer the execution outcome to fetch the URL and OpenAI key:
+- After Terraform has completed, refer the execution outcome to fetch the URL and API key:
 
     ```terraform
     terraform output LLM_URL
@@ -139,7 +139,7 @@ export TOKEN="<API_KEY value>"
 curl -k $URL/v1/models  -H "Authorization: Bearer $TOKEN"
 ```
 
-- Chat completion using python OpenAI library
+- Chat completion using Python OpenAI library
 
 ```python
 #export URL = ""
