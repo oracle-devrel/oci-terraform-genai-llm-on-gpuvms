@@ -4,6 +4,7 @@ import os
 
 token = "YOUR TERRAFORM-GENERATED TOKEN"
 url = "YOUR TERRAFORM-GENERATED API GATEWAY URL"
+# must end in /v1
 
 # Set OpenAI's API key and API base to use vLLM's API server.
 openai_api_key = token

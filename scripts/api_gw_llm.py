@@ -2,7 +2,7 @@
 # requests to the LLM.
 import requests
 
-url = "YOUR TERRAFORM-GENERATED API GATEWAY URL"
+url = "YOUR TERRAFORM-GENERATED API GATEWAY URL" # must end in /v1
 token = "YOUR TERRAFORM-GENERATED TOKEN"
 
 # list models available
