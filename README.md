@@ -131,41 +131,28 @@ It will start and provide an inference endpoint, so we can later call the model 
     "AlphaNumeric..."
     ```
 
-- Sample execution using `curl`:
+We can run the currently enabled models in our LLM server.
+> Make sure to set the variables `url` and `token` with the information from the previous step.
 
-```bash
-export URL="<LLM_URL value>"
-export TOKEN="<API_KEY value>"
-curl -k $URL/v1/models  -H "Authorization: Bearer $TOKEN"
-```
+1. Asking for available models using `curl`:
 
-- Chat completion using Python OpenAI library
+    ```bash
+    export URL="<LLM_URL value>"
+    export TOKEN="<API_KEY value>"
+    curl -k $URL/v1/models  -H "Authorization: Bearer $TOKEN"
+    ```
 
-```python
-#export URL = ""
-#export TOKEN=
-#pip install openai --user
-from openai import OpenAI
-import os
-# Set OpenAI's API key and API base to use vLLM's API server.
-openai_api_key = os.environ['TOKEN']
-openai_api_base = f"{os.environ['URL']}/v1"
-model = "MODEL PATH"
+2. Asking for available models using Python:
 
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-)
+    ```bash
+    python scripts/api_gw_llm.py
+    ```
 
-chat_response = client.chat.completions.create(
-    model=model,
-    messages=[
-        {"role": "system", "content": "size is the length"},
-        {"role": "user", "content": "How big was megaladon with length and weight,make short answer"},
-    ]
-)
-print("Chat response:", chat_response)
-```
+3. Chat completion using Python OpenAI library [in this file](./scripts/completions_llm.py):
+
+    ```bash
+    python scripts/completions_llm.py
+    ```
 
 ## Basic Troubleshooting
 
@@ -188,7 +175,7 @@ print("Chat response:", chat_response)
    sudo systemctl restart  vllm-inference-openai.service
    ```
 
-  
+
 ### Contributors
 
 Author: [Rahul M R.](https://github.com/RahulMR42)
