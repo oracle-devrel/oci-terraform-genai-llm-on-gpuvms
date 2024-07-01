@@ -1,4 +1,4 @@
-# Terraform stack to host LLMs on OCI GPU-based Bare Metal machines
+# Deploying LLMs with NVIDIA GPUs on OCI Compute Bare Metal
 
 ## Introduction
 
