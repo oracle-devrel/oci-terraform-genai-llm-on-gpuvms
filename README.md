@@ -73,7 +73,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     ssh_public_key="SSH Public key to access the BM"
     ```
 
-    > The private key and fingerprint need to be added to your OCI user within your tenancy, in `Identity >> Domains >> OracleIdentityCloudService >> Users`.
+    > The private key and fingerprint need to be added to your OCI user within your tenancy, in `Identity >> Domains >> OracleIdentityCloudService >> Users`. You can use the section on "API Keys" to create a key pair and obtain the tenancy and user OCIDs.
 
     If you don't have one already, you can create a public-private keypair by running the following command in bash:
 
