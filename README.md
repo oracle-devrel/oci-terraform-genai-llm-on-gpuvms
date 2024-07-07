@@ -83,7 +83,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
 
 3. Depending on the compute shape you want to use, modify `variables.tf` (instance_shape variable) and `setup.sh` (parallel_gpu_count). If you have a cluster of `n` GPUs, the GPU count should also be `n`.
 
-3. Execute the Terraform plan & apply:
+4. Execute the Terraform plan & apply:
 
     ```bash
     terraform init
@@ -91,7 +91,7 @@ We'll use the Terraform stack to deploy the required infrastructure.
     terraform apply
     ```
 
-4. (Optional) After you're done with development and want to delete the stack, run the following command:
+5. (Optional) After you're done with development and want to delete the stack, run the following command:
 
     ```bash
     terraform destroy
