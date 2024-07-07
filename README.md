@@ -81,6 +81,8 @@ We'll use the Terraform stack to deploy the required infrastructure.
     ssh-keygen 
     ```
 
+3. Depending on the compute shape you want to use, modify `variables.tf` (instance_shape variable) and `setup.sh` (parallel_gpu_count). If you have a cluster of `n` GPUs, the GPU count should also be `n`.
+
 3. Execute the Terraform plan & apply:
 
     ```bash
